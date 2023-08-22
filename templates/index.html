@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/materialize.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <title>Immich web importer</title>
+
+    <!-- Custom Styles -->
+    <style>
+        .geolocation-checkbox {
+            background-color: #e0e0e0; /* Light gray background */
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        .row {
+            margin-bottom: 25px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h3 class="center-align">Immich web importer</h3>
+
+    <!-- How to Use the Application Collapsible -->
+    <ul class="collapsible">
+        <li>
+            <div class="collapsible-header">
+                <i class="material-icons">help_outline</i>How to Use This Application
+            </div>
+            <div class="collapsible-body">
+                <span>
+                    <ul>
+                        <li>🌍 Choose to set geolocation if you want to add geolocation to the images.</li>
+                        <li>📍 If setting geolocation, input an address.</li>
+                        <li>📂 Select directories you want to import to Immich.</li>
+                        <li>📥 Click "Import" to upload to Immich.</li>
+                        <li>🗺️ If you choose to set geolocation, you can specify the location on the map.</li>
+                    </ul>
+                </span>                
+            </div>
+        </li>
+    </ul>
+
+    <!-- Flash Messages Display -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="row">
+                {% for category, message in messages %}
+                    <div class="col s12">
+                        <div class="card-panel {% if category == 'success' %}green lighten-4{% elif category == 'error' %}red lighten-4{% else %}blue lighten-4{% endif %}">
+                            {{ message }}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <form method="post" class="col s12">
+
+        <!-- Checkbox for Set Geolocation -->
+        <div class="row geolocation-checkbox">
+            <p>
+                <label>
+                    <input type="checkbox" id="setGeolocation" name="setGeolocation" />
+                    <span>Set Geolocation</span>
+                </label>
+            </p>
+        </div>
+
+        <!-- Address Input Field -->
+        <div class="row" id="addressField" style="display:none;">
+            <div class="input-field col s6">
+                <input type="text" id="address" name="address">
+                <label for="address">Enter Address</label>
+            </div>
+        </div>
+
+        <div class="row">
+            {% for directory, count in directories %}
+            <p>
+                <label>
+                    <input type="checkbox" name="dirs" value="{{ directory }}" />
+                    <span>{{ directory }} ({{ count }} files)</span>
+                </label>
+            </p>
+            {% endfor %}
+        </div>
+
+        <button class="btn waves-effect waves-light" type="submit" name="submit">Import
+        </button>
+    </form>
+</div>
+
+<script src="../static/materialize.min.js"></script>
+
+<!-- Custom JavaScript to handle the checkbox toggle and initialize the collapsible -->
+<script>
+    document.getElementById('setGeolocation').addEventListener('change', function() {
+        const addressField = document.getElementById('addressField');
+        if (this.checked) {
+            addressField.style.display = 'block';
+        } else {
+            addressField.style.display = 'none';
+        }
+    });
+
+    // Initialize the collapsible
+    document.addEventListener('DOMContentLoaded', function() {
+        var elems = document.querySelectorAll('.collapsible');
+        var instances = M.Collapsible.init(elems);
+    });
+</script>
+
+</body>
+</html>
