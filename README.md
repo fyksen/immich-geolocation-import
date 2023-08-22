@@ -55,6 +55,13 @@ Note:
 * -e SERVER_URL is the url to your immich server (without the /API part)
 * -e SECRET_KEY is the secret for the flask app. Just run `pwgen 32 1` and insert it.
 
+## Screenshots
+
+![Front page](screenshots/front_page.png)
+Select your directories
+
+![Confirm location](screenshots/confirm_location.png)
+Confirm location. You can set a pointer to adjust location.
 
 ## Contributing
 
