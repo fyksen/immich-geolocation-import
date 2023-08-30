@@ -3,6 +3,7 @@ import os
 import glob
 import requests
 import shutil
+from datetime import datetime
 
 app = Flask(__name__)
 
@@ -57,7 +58,8 @@ def index():
         else:
             return redirect(url_for('import_files'))
 
-    directories = [(d, len(glob.glob(os.path.join(SOURCE_DIR, d, "*")))) for d in sorted(os.listdir(SOURCE_DIR))]
+    directories = [(d, len(glob.glob(os.path.join(SOURCE_DIR, d, "*")))) for d in os.listdir(SOURCE_DIR)]
+    directories.sort(key=lambda x: os.path.getmtime(os.path.join(SOURCE_DIR, x[0])), reverse=True)  # Sort by newest date
     return render_template("index.html", directories=directories)
 
 @app.route('/import_files', methods=["GET", "POST"])
